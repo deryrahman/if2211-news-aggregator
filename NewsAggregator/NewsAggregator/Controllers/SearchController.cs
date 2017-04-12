@@ -12,27 +12,44 @@ namespace NewsAggregator.Controllers
     {
         List<News> newsList = new List<News>();
 
-        private void prepareNewsList()
+        private void PrepareNewsList()
         {
             newsList.Add(new News("http://google.com", "Ini google", "Halo ini google"));
             newsList.Add(new News("https://turfa.cf", "Blog turfa", "Kalo yang ini blog Turfa"));
         }
 
-        public IEnumerable<News> Post(SearchQuery query)
+        public ReturnObject Post(SearchQuery query)
         {
-            List<News> result = new List<News>();
-            KmpSearcher kmp = new KmpSearcher(query.pattern.ToLower());
-
-            prepareNewsList();
-            foreach(News news in newsList)
+            try
             {
-                if ((kmp.checkMatch(news.title.ToLower())) || (kmp.checkMatch(news.content.ToLower())))
+                List<News> result = new List<News>();
+                Searcher searcher;
+
+                if (query.Id == 0)
                 {
-                    result.Add(news);
+                    searcher = new KmpSearcher(query.Pattern.ToLower());
                 }
+                else
+                {
+                    searcher = new RegexSearcher(query.Pattern.ToLower());
+                }
+
+                PrepareNewsList();
+                foreach (News news in newsList)
+                {
+                    if ((searcher.CheckMatch(news.Title.ToLower())) || (searcher.CheckMatch(news.Content.ToLower())))
+                    {
+                        result.Add(news);
+                    }
+                }
+                return (new ReturnObject() { status = true, data = result });
             }
-            
-            return result;
+            catch (Exception e)
+            {
+                List<Exception> returnError = new List<Exception>();
+                returnError.Add(e);
+                return (new ReturnObject() { status = false, data = e.Message });
+            }
         }
     }
 }

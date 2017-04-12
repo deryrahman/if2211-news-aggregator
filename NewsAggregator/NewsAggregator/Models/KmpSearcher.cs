@@ -5,22 +5,26 @@ using System.Web;
 
 namespace NewsAggregator.Models
 {
-    class KmpSearcher
+    class KmpSearcher : Searcher
     {
-        private string pattern;
         private int[] suffpost;
+        
+        public KmpSearcher(string pattern) : base(pattern)
+        {
+            
+        }
 
-        private void preprocess()
+        private void Preprocess()
         {
             int len = 0;
             int i = 1;
 
-            suffpost = new int[pattern.Length];
+            suffpost = new int[Pattern.Length];
 
             suffpost[0] = 0;
-            while (i < pattern.Length)
+            while (i < Pattern.Length)
             {
-                if (pattern[i] == pattern[len])
+                if (Pattern[i] == Pattern[len])
                 {
                     len++;
                     suffpost[i] = len;
@@ -38,35 +42,30 @@ namespace NewsAggregator.Models
             }
         }
 
-        public KmpSearcher(string _pattern)
+        public override void SetPattern(string pattern)
         {
-            setPattern(_pattern);
+            Pattern = String.Copy(pattern);
+            Preprocess();
         }
 
-        public void setPattern(string _pattern)
-        {
-            pattern = String.Copy(_pattern);
-            preprocess();
-        }
-
-        public bool checkMatch(string text)
+        public override bool CheckMatch(string text)
         {
             int i = 0;
             int j = 0;
 
             while (i < text.Length)
             {
-                if (pattern[j] == text[i])
+                if (Pattern[j] == text[i])
                 {
                     j++;
                     i++;
                 }
 
-                if (j == pattern.Length)
+                if (j == Pattern.Length)
                 {
                     return true;
                 }
-                else if ((i < text.Length) && (pattern[j] != text[i]))
+                else if ((i < text.Length) && (Pattern[j] != text[i]))
                 {
                     if (j != 0)
                     {
@@ -82,10 +81,10 @@ namespace NewsAggregator.Models
             return false;
         }
 
-        public static bool checkMatch(string text, string pattern)
+        public static bool CheckMatch(string text, string pattern)
         {
             KmpSearcher kmp = new KmpSearcher(pattern);
-            return kmp.checkMatch(text);
+            return kmp.CheckMatch(text);
         }
     }
 }

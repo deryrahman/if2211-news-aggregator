@@ -7,16 +7,15 @@ namespace NewsAggregator.Models
 {
     public class News
     {
-        public string url { get; }
-        public string title { get; }
-        public string content { get; }
+        public string Url { get; }
+        public string Title { get; }
+        public string Content { get; }
         
         public News(string url, string title, string content)
         {
-            this.url = String.Copy(url);
-            this.title = String.Copy(title);
-            this.content = String.Copy(content);
-
+            Url = String.Copy(url);
+            Title = String.Copy(title);
+            Content = String.Copy(content);
         }
     }
 }

@@ -5,9 +5,9 @@ using System.Web;
 
 namespace NewsAggregator.Models
 {
-    public class SearchQuery
+    public class ReturnObject
     {
-        public int Id { get; set; }
-        public string Pattern { get; set; }
+        public bool status { get; set; }
+        public Object data { get; set; }
     }
 }
