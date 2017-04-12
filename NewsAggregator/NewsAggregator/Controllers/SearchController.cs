@@ -22,24 +22,44 @@ namespace NewsAggregator.Controllers
         {
             try
             {
-                List<News> result = new List<News>();
+                List<SearchResult> result = new List<SearchResult>();
                 Searcher searcher;
 
                 if (query.Id == 0)
                 {
-                    searcher = new KmpSearcher(query.Pattern.ToLower());
+                    searcher = new KmpSearcher(query.Pattern);
                 }
                 else
                 {
-                    searcher = new RegexSearcher(query.Pattern.ToLower());
+                    searcher = new RegexSearcher(query.Pattern);
                 }
 
                 PrepareNewsList();
+
                 foreach (News news in newsList)
                 {
-                    if ((searcher.CheckMatch(news.Title.ToLower())) || (searcher.CheckMatch(news.Content.ToLower())))
+                    SearchResult searchResult = new SearchResult() { Url = news.Url, Title = news.Title };
+                    bool found = false;
+
+                    int indexMatchContent = searcher.CheckMatch(news.Content);
+                    if (indexMatchContent != -1)
                     {
-                        result.Add(news);
+                        found = true;
+                        searchResult.Match = SearchResult.StringToMatch(news.Content, query.Pattern, indexMatchContent, 10);
+                    }
+                    else
+                    {
+                        int indexMatchTitle = searcher.CheckMatch(news.Title);
+                        if (indexMatchTitle != -1)
+                        {
+                            found = true;
+                            searchResult.Match = SearchResult.StringToMatch(news.Title, query.Pattern, indexMatchTitle, 5) + " (Pada Judul)";
+                        }
+                    }
+
+                    if (found)
+                    {
+                        result.Add(searchResult);
                     }
                 }
                 return (new ReturnObject() { status = true, data = result });

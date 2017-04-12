@@ -14,7 +14,7 @@ Ada dua kemungkinan, yaitu ada error dan gak ada error. Kalau ada error, JSON ba
 ```json
 {
 	"status" : false,
-	"data" : *pesan error*
+	"data" : "Ini pesan error"
 }
 ```
 
@@ -23,12 +23,12 @@ Kalau gak ada error, JSON bakal berbentuk :
 {
 	"status" : true,
 	"data" : [
-		{ Url : *Url Berita*, Title : *Judul Berita*, Content : *Isi Berita*},
-		{ .. idem .. },
-		{ .. idem ..},
-		...
-		...
-		{ .. idem ..{
+		{ Url : "Url Berita", Title : "Judul Berita", Match : "Konten yang sesuai dengan yang dicari"},
+		{ Url : "Url Berita", Title : "Judul Berita", Match : "Konten yang sesuai dengan yang dicari"},
+		{ Url : "Url Berita", Title : "Judul Berita", Match : "Konten yang sesuai dengan yang dicari"},
+		...,
+		...,
+		{ Url : "Url Berita", Title : "Judul Berita", Match : "Konten yang sesuai dengan yang dicari}
 	]
 }
 ```

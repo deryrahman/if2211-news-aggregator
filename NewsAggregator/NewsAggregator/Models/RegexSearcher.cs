@@ -13,9 +13,18 @@ namespace NewsAggregator.Models
 
         }
 
-        public override bool CheckMatch(string text)
+        public override int CheckMatch(string text)
         {
-            return Regex.IsMatch(text, Pattern);  
+            Match match = Regex.Match(text, Pattern);
+
+            if (!(match.Success))
+            {
+                return -1;
+            }
+            else
+            {
+                return match.Index;
+            }
         }
 
         public override void SetPattern(string pattern)

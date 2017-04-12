@@ -44,14 +44,16 @@ namespace NewsAggregator.Models
 
         public override void SetPattern(string pattern)
         {
-            Pattern = String.Copy(pattern);
+            Pattern = pattern.ToLower();
             Preprocess();
         }
 
-        public override bool CheckMatch(string text)
+        public override int CheckMatch(string text)
         {
             int i = 0;
             int j = 0;
+
+            text = text.ToLower();
 
             while (i < text.Length)
             {
@@ -63,7 +65,7 @@ namespace NewsAggregator.Models
 
                 if (j == Pattern.Length)
                 {
-                    return true;
+                    return i-j;
                 }
                 else if ((i < text.Length) && (Pattern[j] != text[i]))
                 {
@@ -78,10 +80,10 @@ namespace NewsAggregator.Models
                 }
             }
 
-            return false;
+            return -1;
         }
 
-        public static bool CheckMatch(string text, string pattern)
+        public static int CheckMatch(string text, string pattern)
         {
             KmpSearcher kmp = new KmpSearcher(pattern);
             return kmp.CheckMatch(text);

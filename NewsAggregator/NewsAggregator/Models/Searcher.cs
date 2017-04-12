@@ -15,6 +15,6 @@ namespace NewsAggregator.Models
         }
 
         public abstract void SetPattern(string pattern);
-        public abstract bool CheckMatch(string text);
+        public abstract int CheckMatch(string text);
     }
 }

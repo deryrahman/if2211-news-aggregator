@@ -97,6 +97,7 @@
     <Compile Include="Models\ReturnObject.cs" />
     <Compile Include="Models\Searcher.cs" />
     <Compile Include="Models\SearchQuery.cs" />
+    <Compile Include="Models\SearchResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
