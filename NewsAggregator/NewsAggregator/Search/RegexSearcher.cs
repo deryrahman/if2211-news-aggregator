@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Text.RegularExpressions;
 
-namespace NewsAggregator.Models
+namespace NewsAggregator.Search
 {
     public class RegexSearcher : Searcher
     {
@@ -15,7 +14,7 @@ namespace NewsAggregator.Models
 
         public override int CheckMatch(string text)
         {
-            Match match = Regex.Match(text, Pattern);
+            Match match = Regex.Match(text.ToLower(), Pattern);
 
             if (!(match.Success))
             {
@@ -29,7 +28,7 @@ namespace NewsAggregator.Models
 
         public override void SetPattern(string pattern)
         {
-            Pattern = pattern;
+            Pattern = pattern.ToLower();
         }
     }
 }

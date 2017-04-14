@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace NewsAggregator.Models
+﻿namespace NewsAggregator.Search
 {
     public abstract class Searcher
     {

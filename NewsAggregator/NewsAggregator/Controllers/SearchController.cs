@@ -1,10 +1,10 @@
 ﻿using NewsAggregator.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
+using Newtonsoft.Json;
+using NewsAggregator.Scraper;
+using NewsAggregator.Search;
 
 namespace NewsAggregator.Controllers
 {
@@ -14,8 +14,14 @@ namespace NewsAggregator.Controllers
 
         private void PrepareNewsList()
         {
-            newsList.Add(new News("http://google.com", "Ini google", "Halo ini google"));
-            newsList.Add(new News("https://turfa.cf", "Blog turfa", "Kalo yang ini blog Turfa"));
+            string[] scrapers = new string[] { DetikScraper.PostFix };
+            string prefix = System.Web.Hosting.HostingEnvironment.MapPath("~/NewsStore/");
+
+            foreach (string scraper in scrapers)
+            {
+                string json = System.IO.File.ReadAllText(prefix + scraper + ".txt");
+                newsList.AddRange(JsonConvert.DeserializeObject<List<News>>(json));
+            }
         }
 
         public ReturnObject Post(SearchQuery query)
@@ -29,9 +35,17 @@ namespace NewsAggregator.Controllers
                 {
                     searcher = new KmpSearcher(query.Pattern);
                 }
-                else
+                else if (query.Id == 1)
+                {
+                    searcher = new BoyerMooreSearcher(query.Pattern);
+                }
+                else if (query.Id == 2)
                 {
                     searcher = new RegexSearcher(query.Pattern);
+                }
+                else
+                {
+                    throw new NotImplementedException();
                 }
 
                 PrepareNewsList();
@@ -45,7 +59,7 @@ namespace NewsAggregator.Controllers
                     if (indexMatchContent != -1)
                     {
                         found = true;
-                        searchResult.Match = SearchResult.StringToMatch(news.Content, query.Pattern, indexMatchContent, 10);
+                        searchResult.Match = SearchResult.StringToMatch(news.Content, query.Pattern, indexMatchContent, 50);
                     }
                     else
                     {
@@ -53,7 +67,7 @@ namespace NewsAggregator.Controllers
                         if (indexMatchTitle != -1)
                         {
                             found = true;
-                            searchResult.Match = SearchResult.StringToMatch(news.Title, query.Pattern, indexMatchTitle, 5) + " (Pada Judul)";
+                            searchResult.Match = SearchResult.StringToMatch(news.Title, query.Pattern, indexMatchTitle, 10) + " (Pada Judul)";
                         }
                     }
 
@@ -66,8 +80,6 @@ namespace NewsAggregator.Controllers
             }
             catch (Exception e)
             {
-                List<Exception> returnError = new List<Exception>();
-                returnError.Add(e);
                 return (new ReturnObject() { status = false, data = e.Message });
             }
         }
