@@ -31,6 +31,18 @@ namespace NewsAggregator.Controllers
                 List<SearchResult> result = new List<SearchResult>();
                 Searcher searcher;
 
+                if (query.Pattern == null)
+                {
+                    query.Pattern = "";
+                }
+
+                query.Pattern = query.Pattern.Trim();
+
+                if (query.Pattern.Equals(""))
+                {
+                    throw new ArgumentException("Pattern kosong.");
+                }
+                
                 if (query.Id == 0)
                 {
                     searcher = new KmpSearcher(query.Pattern);
@@ -47,7 +59,7 @@ namespace NewsAggregator.Controllers
                 {
                     throw new NotImplementedException();
                 }
-
+                
                 PrepareNewsList();
 
                 foreach (News news in newsList)
