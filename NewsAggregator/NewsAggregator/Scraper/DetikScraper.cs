@@ -14,25 +14,23 @@ namespace NewsAggregator.Scraper
         
         private static void GetContent(News news)
         {
-            HtmlParser parser = new HtmlParser();
-            WebClient client = new WebClient();
-
-            var document = parser.Parse(client.DownloadString(news.Url));
-            var isi = document.All.Where(m => m.LocalName == "div" && (m.ClassList.Contains("detail_text") || m.ClassList.Contains("text_detail") || m.ClassList.Contains("read__content")));
-
-            var arr = isi.ToArray();
-
-            if (arr.Length > 0)
+            try
             {
+                HtmlParser parser = new HtmlParser();
+                WebClient client = new WebClient();
+
+                var document = parser.Parse(client.DownloadString(news.Url));
+                var isi = document.All.Where(m => m.LocalName == "div" && (m.ClassList.Contains("detail_text") || m.ClassList.Contains("text_detail") || m.ClassList.Contains("read__content")));
+                
                 news.Content = isi.ToArray()[0].TextContent;
             }
-            else
+            catch
             {
                 news.Content = "";
             }
         }
 
-        public static IEnumerable<News> Scrape()
+        public static List<News> Scrape()
         {
             List<News> result = RSSScraper.GetTitleAndURL(RSS);
 

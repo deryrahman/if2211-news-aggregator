@@ -19,8 +19,7 @@ namespace NewsAggregator.Controllers
 
             foreach (string scraper in scrapers)
             {
-                string json = System.IO.File.ReadAllText(prefix + scraper + ".txt");
-                newsList.AddRange(JsonConvert.DeserializeObject<List<News>>(json));
+                newsList.AddRange(News.GetNewsList(prefix + scraper + ".txt"));
             }
         }
 
@@ -71,7 +70,7 @@ namespace NewsAggregator.Controllers
                     if (indexMatchContent != -1)
                     {
                         found = true;
-                        searchResult.Match = SearchResult.StringToMatch(news.Content, query.Pattern, indexMatchContent, 50);
+                        searchResult.Match = SearchResult.StringToMatch(news.Content, query.Pattern, indexMatchContent, 100);
                     }
                     else
                     {
@@ -79,7 +78,7 @@ namespace NewsAggregator.Controllers
                         if (indexMatchTitle != -1)
                         {
                             found = true;
-                            searchResult.Match = SearchResult.StringToMatch(news.Title, query.Pattern, indexMatchTitle, 10) + " (Pada Judul)";
+                            searchResult.Match = SearchResult.StringToMatch(news.Title, query.Pattern, indexMatchTitle, 50) + " (Pada Judul)";
                         }
                     }
 

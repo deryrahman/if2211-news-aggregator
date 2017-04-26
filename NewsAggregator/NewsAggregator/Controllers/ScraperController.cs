@@ -17,25 +17,67 @@ namespace NewsAggregator.Controllers
             news.Content = Regex.Replace(result, @"\s+", " ");
         }
 
+        private void Combine (List<News> destination, List<News> source)
+        {
+            foreach (News news in source)
+            {
+                bool unique = true;
+
+                foreach (News newsDest in destination)
+                {
+                    if (news.Url == newsDest.Url)
+                    {
+                        unique = false;
+
+                        if (newsDest.Content.Equals(""))
+                        {
+                            newsDest.Content = news.Content;
+                        }
+                    }
+                }
+
+                if (unique)
+                {
+                    destination.Add(news);
+                }
+            }
+        }
+
+        private string GetPath(string postFix)
+        {       
+            string prefix = System.Web.Hosting.HostingEnvironment.MapPath("~/NewsStore/");
+            return prefix + postFix + ".txt";
+        }
+        private KeyValuePair<string, KeyValuePair<List<News>, List<News>>> DaftarBeritaEntry (string postFix, List<News> Scraped)
+        {
+            return new KeyValuePair<string, KeyValuePair<List<News>, List<News>>>(postFix, new KeyValuePair<List<News>, List<News>>(News.GetNewsList(GetPath(postFix)), Scraped));
+        }
+
         public ReturnObject Get()
         {
             try
             {
-                List<KeyValuePair<string, IEnumerable<News>>> daftarBerita = new List<KeyValuePair<string, IEnumerable<News>>>();
-                daftarBerita.Add(new KeyValuePair<string, IEnumerable<News>>(DetikScraper.PostFix, DetikScraper.Scrape()));
+                List<KeyValuePair<string, KeyValuePair<List<News>, List<News>>>> daftarBerita = new List<KeyValuePair<string, KeyValuePair<List<News>, List<News>>>>();
+
+                daftarBerita.Add(DaftarBeritaEntry(DetikScraper.PostFix, DetikScraper.Scrape()));
 
                 foreach (var berita in daftarBerita)
                 {
-                    foreach (News news in berita.Value)
+                    foreach (News news in berita.Value.Key)
                     {
                         CleanContent(news);
                     }
 
-                    string path = System.Web.Hosting.HostingEnvironment.MapPath("~/NewsStore/" + berita.Key + ".txt");
-
-                    using (StreamWriter file = new StreamWriter(path))
+                    foreach (News news in berita.Value.Value)
                     {
-                        file.WriteLine(JsonConvert.SerializeObject(berita.Value));
+                        CleanContent(news);
+                    }
+
+                    Combine(berita.Value.Key, berita.Value.Value);
+
+                    using (StreamWriter file = new StreamWriter(GetPath(berita.Key)))
+                    {
+                        file.WriteLine(JsonConvert.SerializeObject(berita.Value.Key));
                     }
                 }
 
