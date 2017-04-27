@@ -22,7 +22,7 @@ namespace NewsAggregator.Scraper
             foreach(XmlNode item in channelNode.ChildNodes){
                 if (item.Name.Equals("item"))
                 {
-                    result.Add(new News() { Url = item.SelectSingleNode("link").InnerText, Title = item.SelectSingleNode("title").InnerText });
+                    result.Add(new News() { Url = item.SelectSingleNode("link").InnerText, Title = item.SelectSingleNode("title").InnerText, ImageUrl = item.SelectSingleNode("enclosure").Attributes["url"].Value });
                 }
             }
 

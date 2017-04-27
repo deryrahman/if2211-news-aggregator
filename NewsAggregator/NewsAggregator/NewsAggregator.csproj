@@ -86,7 +86,6 @@
     <Content Include="Global.asax" />
     <Content Include="index.html" />
     <Content Include="Javascript\jquery-3.2.1.min.js" />
-    <Content Include="NewsStore\detik.txt" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -125,6 +124,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="NewsStore\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

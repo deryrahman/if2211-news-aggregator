@@ -19,7 +19,7 @@ namespace NewsAggregator.Controllers
 
             foreach (string scraper in scrapers)
             {
-                newsList.AddRange(News.GetNewsList(prefix + scraper + ".txt"));
+                newsList.AddRange(News.GetNewsList(prefix + scraper + ".json"));
             }
         }
 

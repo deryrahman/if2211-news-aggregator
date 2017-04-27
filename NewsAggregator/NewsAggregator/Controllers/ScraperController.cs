@@ -46,7 +46,7 @@ namespace NewsAggregator.Controllers
         private string GetPath(string postFix)
         {       
             string prefix = System.Web.Hosting.HostingEnvironment.MapPath("~/NewsStore/");
-            return prefix + postFix + ".txt";
+            return prefix + postFix + ".json";
         }
         private KeyValuePair<string, KeyValuePair<List<News>, List<News>>> DaftarBeritaEntry (string postFix, List<News> Scraped)
         {
