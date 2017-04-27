@@ -86,6 +86,7 @@
     <Content Include="Global.asax" />
     <Content Include="index.html" />
     <Content Include="Javascript\jquery-3.2.1.min.js" />
+    <Content Include="Javascript\kegantengan_hakiki.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

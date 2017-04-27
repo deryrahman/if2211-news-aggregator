@@ -9,7 +9,7 @@ namespace NewsAggregator.Scraper
 {
     public class RSSScraper
     {
-        private static int maxContent = 20;
+        private static int maxContent = 1000;
 
         private static string GetImageUrl(string postFix, XmlNode item)
         {

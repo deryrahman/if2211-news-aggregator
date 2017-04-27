@@ -77,7 +77,7 @@ namespace NewsAggregator.Controllers
                     if (indexMatchContent != -1)
                     {
                         found = true;
-                        searchResult.Match = SearchResult.StringToMatch(news.Content, query.Pattern, indexMatchContent, 100);
+                        searchResult.Match = SearchResult.StringToMatch(news.Content, query.Pattern, indexMatchContent, 200);
                     }
                     else
                     {
