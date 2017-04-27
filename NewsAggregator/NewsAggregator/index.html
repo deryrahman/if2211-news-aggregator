@@ -25,6 +25,13 @@
                     <option value=2>Regex</option>
                 </select>
                 
+                <select class="nav-child" name="Source" id="Source" onchange="search();">
+                    <option value=99>All</option>
+                    <option value=0>Detik</option>
+                    <option value=1>Tempo</option>
+                    <option value=2>Viva</option>
+                </select>
+
                 <button class="nav-child" onclick="scrape()">Scrape!</button>
                 <div id="scrape_result"></div>
 
@@ -46,13 +53,14 @@
 
             var id = $("#id").val();
             var pattern = $("#pattern").val();
-            
+            var source = $("#Source").val();
             if(pattern!=""){
                 $.ajax({
                     url: "api/search",
                     data: {
                         "id": id,
-                        "pattern": pattern
+                        "pattern": pattern,
+                        "source": source
                     },
                     type: "POST",
                     dataType: "JSON"
@@ -61,9 +69,10 @@
                     $("#result").html("");
                     
                     if (json.status) {
+                        $("#result").append("<div class=\"status\">" + "Hasil pencarian : " + json.data.length + "</div>");
                         for (var res in json.data) {
                             $("#result").append("<img src= \"" + json.data[res].ImageUrl + "\">");
-                            $("#result").append("<div class=\"article\"><h3><a href = \"" + json.data[res].Url + "\">" + json.data[res].Title + "</a></h3><p>" + json.data[res].Match + "</p></div>");
+                            $("#result").append("<div class=\"article\"><h3><a href = \"" + json.data[res].Url + "\">" + json.data[res].Title + "</a></h3><div class=\"date\">Publication date : " + json.data[res].PubDate + "</div><p>" + json.data[res].Match + "</p></div>");
                             $("#result").append("<div class=\"clear\"><hr/>");
                         }
                     }
