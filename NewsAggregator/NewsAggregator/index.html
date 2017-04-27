@@ -1,25 +1,36 @@
 ﻿<!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8" />
-    <title>Contoh</title>
-</head>
-<body>
-    <h2>Search</h2>
-    <select name="id" id="id" onchange="search();">
-        <option value=0>KMP</option>
-        <option value=1>Boyer Moore</option>
-        <option value=2>Regex</option>
-    </select>
-    <input name="pattern" placeholder="Pattern" id="pattern" onkeyup="search();" autocomplete="off" autofocus/>
-    <input type="button" value="Search" onclick="search();" />
+    <head>
+        <meta charset="utf-8" />
+        <title>ITB - String Matching Search Engine</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+    </head>
+    <body>
+        <div class="container">
+	        <div class="search-box">
+		        <input type="text" id="pattern" onkeyup="search();" autocomplete="off"/>
+		        <span></span>
+	        </div>
+            <div id="result"></div>
+        </div>
+        <!-----
+        <h2>Search</h2>
+        <select name="id" id="id" onchange="search();">
+            <option value=0>KMP</option>
+            <option value=1>Boyer Moore</option>
+            <option value=2>Regex</option>
+        </select>
+        <input name="pattern" placeholder="Pattern" id="pattern" onkeyup="search();" autocomplete="off" autofocus/>
+        <input type="button" value="Search" onclick="search();" />
 
-    <div id="result"></div>
+        <div id="result"></div>
 
-    <h2>Scrape</h2>
-    <button onclick="scrape()">Scrape!</button>
-    <div id="scrape_result"></div>
-
+        <h2>Scrape</h2>
+        <button onclick="scrape()">Scrape!</button>
+        <div id="scrape_result"></div>
+            ---->
+    </body>
     <script src="Javascript/jquery-3.2.1.min.js"></script>
     <script>
         function search() {
@@ -27,32 +38,36 @@
 
             var id = $("#id").val();
             var pattern = $("#pattern").val();
-
-            $.ajax({
-                url: "api/search",
-                data: {
-                    "id": id,
-                    "pattern": pattern
-                },
-                type: "POST",
-                dataType: "JSON"
-            })
-            .done(function (json) {
-                $("#result").html("");
+            
+            if(pattern!=""){
+                $.ajax({
+                    url: "api/search",
+                    data: {
+                        "id": id,
+                        "pattern": pattern
+                    },
+                    type: "POST",
+                    dataType: "JSON"
+                })
+                .done(function (json) {
+                    $("#result").html("");
                 
-                if (json.status) {
-                    for (var res in json.data) {
-                        $("#result").append("<h3><a href = \"" + json.data[res].Url + "\">" + json.data[res].Title + "</a></h3><p>" + json.data[res].Match + "</p>");
+                    if (json.status) {
+                        for (var res in json.data) {
+                            $("#result").append("<h3><a href = \"" + json.data[res].Url + "\">" + json.data[res].Title + "</a></h3><p>" + json.data[res].Match + "</p>");
+                        }
                     }
-                }
-                else {
-                    $("#result").append("<p>Error : " + json.data + "</p>");
-                }
-            })
-            .fail(function (xhr, status, errorThrown) {
+                    else {
+                        $("#result").append("<p>Error : " + json.data + "</p>");
+                    }
+                })
+                .fail(function (xhr, status, errorThrown) {
+                    $("#result").html("");
+                    $("result").append("<p>Error :" + errorThrown + "</p>");
+                });
+            } else {
                 $("#result").html("");
-                $("result").append("<p>Error :" + errorThrown + "</p>");
-            });
+            }   
         }
 
         function scrape() {
@@ -80,5 +95,4 @@
             });
         }
     </script>
-</body>
 </html>
