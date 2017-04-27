@@ -4,14 +4,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Web;
 
 namespace NewsAggregator.Scraper
 {
-    public class DetikScraper
+    public class TempoScraper
     {
-        private static string RSS = "http://rss.detik.com/index.php/detikcom";
-        public static string PostFix = "detik";
-        
+        private static string RSS = "https://www.tempo.co/rss/terkini";
+        public static string PostFix = "tempo";
+
         private static void GetContent(News news)
         {
             try
@@ -20,8 +21,8 @@ namespace NewsAggregator.Scraper
                 WebClient client = new WebClient();
 
                 var document = parser.Parse(client.DownloadString(news.Url));
-                var isi = document.All.Where(m => m.LocalName == "div" && (m.ClassList.Contains("detail_text") || m.ClassList.Contains("text_detail") || m.ClassList.Contains("read__content")));
-                
+                var isi = document.All.Where(m => m.LocalName == "p");
+
                 news.Content = isi.ToArray()[0].TextContent;
             }
             catch

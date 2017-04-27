@@ -14,7 +14,7 @@ namespace NewsAggregator.Controllers
 
         private void PrepareNewsList()
         {
-            string[] scrapers = new string[] { DetikScraper.PostFix };
+            string[] scrapers = new string[] { DetikScraper.PostFix, TempoScraper.PostFix, VivaScraper.PostFix };
             string prefix = System.Web.Hosting.HostingEnvironment.MapPath("~/NewsStore/");
 
             foreach (string scraper in scrapers)
@@ -63,7 +63,7 @@ namespace NewsAggregator.Controllers
 
                 foreach (News news in newsList)
                 {
-                    SearchResult searchResult = new SearchResult() { Url = news.Url, Title = news.Title, ImageUrl = news.ImageUrl };
+                    SearchResult searchResult = new SearchResult() { Url = news.Url, Title = news.Title, ImageUrl = news.ImageUrl, PubDate = news.PubDate };
                     bool found = false;
 
                     int indexMatchContent = searcher.CheckMatch(news.Content);

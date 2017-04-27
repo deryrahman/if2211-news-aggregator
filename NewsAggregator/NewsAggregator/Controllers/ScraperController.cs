@@ -59,7 +59,32 @@ namespace NewsAggregator.Controllers
             {
                 List<KeyValuePair<string, KeyValuePair<List<News>, List<News>>>> daftarBerita = new List<KeyValuePair<string, KeyValuePair<List<News>, List<News>>>>();
 
-                daftarBerita.Add(DaftarBeritaEntry(DetikScraper.PostFix, DetikScraper.Scrape()));
+                try
+                {
+                    daftarBerita.Add(DaftarBeritaEntry(DetikScraper.PostFix, DetikScraper.Scrape()));
+                }
+                catch (Exception e)
+                {
+
+                }
+
+                try
+                {
+                    daftarBerita.Add(DaftarBeritaEntry(TempoScraper.PostFix, TempoScraper.Scrape()));
+                }
+                catch (Exception e)
+                {
+
+                }
+
+                try
+                {
+                    daftarBerita.Add(DaftarBeritaEntry(VivaScraper.PostFix, VivaScraper.Scrape()));
+                }
+                catch (Exception e)
+                {
+
+                }
 
                 foreach (var berita in daftarBerita)
                 {
