@@ -5,31 +5,39 @@
         <title>ITB - String Matching Search Engine</title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
         <link rel="stylesheet" type="text/css" href="css/style.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     </head>
     <body>
-        <div class="container">
+        <div id="top">
+            <div class="t960 nav-menu">
+                <a class="nav-menu-child" href="about.html">About Us</a>
+                <div class="clear"></div>
+            </div>
+        </div>
+        <div id="header" class="t960">
+            <img class="logo" src="img/logo.png"/>
+        </div>
+        <div class="t960">
+            <div id="nav">
+                <select class="nav-child" name="id" id="id" onchange="search();">
+                    <option value=0>KMP</option>
+                    <option value=1>Boyer Moore</option>
+                    <option value=2>Regex</option>
+                </select>
+                
+                <button class="nav-child" onclick="scrape()">Scrape!</button>
+                <div id="scrape_result"></div>
+
+                <div class="clear"></div>
+            </div>
+        </div>
+        <div class="t960">
 	        <div class="search-box">
 		        <input type="text" id="pattern" onkeyup="search();" autocomplete="off"/>
 		        <span></span>
 	        </div>
             <div id="result"></div>
         </div>
-        <!-----
-        <h2>Search</h2>
-        <select name="id" id="id" onchange="search();">
-            <option value=0>KMP</option>
-            <option value=1>Boyer Moore</option>
-            <option value=2>Regex</option>
-        </select>
-        <input name="pattern" placeholder="Pattern" id="pattern" onkeyup="search();" autocomplete="off" autofocus/>
-        <input type="button" value="Search" onclick="search();" />
-
-        <div id="result"></div>
-
-        <h2>Scrape</h2>
-        <button onclick="scrape()">Scrape!</button>
-        <div id="scrape_result"></div>
-            ---->
     </body>
     <script src="Javascript/jquery-3.2.1.min.js"></script>
     <script>
@@ -51,10 +59,12 @@
                 })
                 .done(function (json) {
                     $("#result").html("");
-                
+                    
                     if (json.status) {
                         for (var res in json.data) {
-                            $("#result").append("<h3><a href = \"" + json.data[res].Url + "\">" + json.data[res].Title + "</a></h3><p>" + json.data[res].Match + "</p>");
+                            $("#result").append("<img src= \"" + json.data[res].ImageUrl + "\">");
+                            $("#result").append("<div class=\"article\"><h3><a href = \"" + json.data[res].Url + "\">" + json.data[res].Title + "</a></h3><p>" + json.data[res].Match + "</p></div>");
+                            $("#result").append("<div class=\"clear\"><hr/>");
                         }
                     }
                     else {
@@ -72,7 +82,7 @@
 
         function scrape() {
             $("#scrape_result").html("");
-            $("#scrape_result").append("<p>Scraping...</p>");
+            $("#scrape_result").append("<i class=\"fa fa-circle-o-notch fa-spin\" style=\"font-size:24px;line-height:40px;\"></i>");
 
             $.ajax({
                 url: "/api/scraper",
