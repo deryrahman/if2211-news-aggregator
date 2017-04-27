@@ -7,6 +7,7 @@ namespace NewsAggregator.Models
         public string Url { get; set; }
         public string Title { get; set; }
         public string Match { get; set; }
+        public string ImageUrl { get; set; }
 
         public static string StringToMatch(string text, string pattern, int foundIndex, int tailLength)
         {

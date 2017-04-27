@@ -63,7 +63,7 @@ namespace NewsAggregator.Controllers
 
                 foreach (News news in newsList)
                 {
-                    SearchResult searchResult = new SearchResult() { Url = news.Url, Title = news.Title };
+                    SearchResult searchResult = new SearchResult() { Url = news.Url, Title = news.Title, ImageUrl = news.ImageUrl };
                     bool found = false;
 
                     int indexMatchContent = searcher.CheckMatch(news.Content);
