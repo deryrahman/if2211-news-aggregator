@@ -8,6 +8,7 @@ namespace NewsAggregator.Models
         public string Title { get; set; }
         public string Match { get; set; }
         public string ImageUrl { get; set; }
+        public string PubDate { get; set; }
 
         public static string StringToMatch(string text, string pattern, int foundIndex, int tailLength)
         {

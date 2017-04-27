@@ -12,14 +12,21 @@ namespace NewsAggregator.Controllers
     {
         List<News> newsList = new List<News>();
 
-        private void PrepareNewsList()
+        private void PrepareNewsList(int source)
         {
-            string[] scrapers = new string[] { DetikScraper.PostFix };
+            string[] scrapers = new string[] { DetikScraper.PostFix, TempoScraper.PostFix, VivaScraper.PostFix };
             string prefix = System.Web.Hosting.HostingEnvironment.MapPath("~/NewsStore/");
 
-            foreach (string scraper in scrapers)
+            if (source >= scrapers.Length)
             {
-                newsList.AddRange(News.GetNewsList(prefix + scraper + ".json"));
+                foreach (string scraper in scrapers)
+                {
+                    newsList.AddRange(News.GetNewsList(prefix + scraper + ".json"));
+                }
+            }
+            else
+            {
+                newsList.AddRange(News.GetNewsList(prefix + scrapers[source] + ".json"));
             }
         }
 
@@ -59,11 +66,11 @@ namespace NewsAggregator.Controllers
                     throw new NotImplementedException();
                 }
                 
-                PrepareNewsList();
+                PrepareNewsList(query.Source);
 
                 foreach (News news in newsList)
                 {
-                    SearchResult searchResult = new SearchResult() { Url = news.Url, Title = news.Title, ImageUrl = news.ImageUrl };
+                    SearchResult searchResult = new SearchResult() { Url = news.Url, Title = news.Title, ImageUrl = news.ImageUrl, PubDate = news.PubDate };
                     bool found = false;
 
                     int indexMatchContent = searcher.CheckMatch(news.Content);

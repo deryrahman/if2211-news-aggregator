@@ -9,6 +9,7 @@ namespace NewsAggregator.Models
         public string Title { get; set; }
         public string Content { get; set; }
         public string ImageUrl { get; set; }
+        public string PubDate { get; set; }
 
         public static List<News> GetNewsList(string path)
         {
